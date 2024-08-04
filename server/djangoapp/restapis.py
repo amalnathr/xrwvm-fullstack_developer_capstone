@@ -9,26 +9,30 @@ backend_url = os.getenv(
     'backend_url', default="http://localhost:3030")
 sentiment_analyzer_url = os.getenv(
     'sentiment_analyzer_url',
-    default="http://localhost:5050/")
+    default="https://sentianalyzer.1k75f2lkgrsc.us-south.codeengine.appdomain.cloud")
 
 # def get_request(endpoint, **kwargs):
 # Add code for get requests to back end
 def get_request(endpoint, **kwargs):
-    params = ""
-    if(kwargs):
-        for key,value in kwargs.items():
-            params=params+key+"="+value+"&"
+    params = "&".join(f"{key}={value}" for key, value in kwargs.items())
+    request_url = f"{backend_url}{endpoint}?{params}"
+    print(f"GET from {request_url}")
 
-    request_url = backend_url+endpoint+"?"+params
-
-    print("GET from {} ".format(request_url))
     try:
-        # Call get method of requests library with URL and parameters
         response = requests.get(request_url)
+        response.raise_for_status()  # Raise HTTPError for bad responses
         return response.json()
-    except:
-        # If any error occurs
-        print("Network exception occurred")
+    except requests.exceptions.HTTPError as http_err:
+        logger.error(f"HTTP error occurred: {http_err}")
+    except requests.exceptions.RequestException as req_err:
+        logger.error(f"Request error occurred: {req_err}")
+    except ValueError as json_err:
+        logger.error(f"JSON decode error: {json_err}")
+    except Exception as err:
+        logger.error(f"Unexpected error: {err}")
+
+    return None
+
 
 # def analyze_review_sentiments(text):
 # request_url = sentiment_analyzer_url+"analyze/"+text

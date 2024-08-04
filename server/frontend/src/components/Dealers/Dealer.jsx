@@ -51,10 +51,13 @@ const Dealer = () => {
     }
   }
 
-  const senti_icon = (sentiment)=>{
-    let icon = sentiment === "positive"?positive_icon:sentiment==="negative"?negative_icon:neutral_icon;
+  const senti_icon = (sentiment) => {
+    console.log("Sentiment received:", sentiment); // Log sentiment value
+    let icon = sentiment === "positive" ? positive_icon : sentiment === "negative" ? negative_icon : neutral_icon;
     return icon;
-  }
+  };
+  
+  
 
   useEffect(() => {
     get_dealer();
