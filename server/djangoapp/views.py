@@ -96,18 +96,29 @@ def get_dealerships(request, state="All"):
 # def get_dealer_reviews(request,dealer_id):
 # ...
 def get_dealer_reviews(request, dealer_id):
-    endpoint = f"/fetchReviews/dealer/{dealer_id}"
-    reviews = get_request(endpoint)
-    
-    if reviews is None:
-        return JsonResponse({"status": 500, "message": "Error fetching reviews"}, status=500)
+    if dealer_id:
+        endpoint = f"/fetchReviews/dealer/{dealer_id}"
+        reviews = get_request(endpoint)
 
-    # Handle case where reviews data might be empty
-    if not isinstance(reviews, list):
-        return JsonResponse({"status": 500, "message": "Invalid data format"}, status=500)
+        if reviews is not None:
+            for review_detail in reviews:
+                try:
+                    response = analyze_review_sentiments(review_detail['review'])
+                    review_detail['sentiment'] = response.get('sentiment', 'unknown')
+                except KeyError:
+                    review_detail['sentiment'] = 'unknown'
+                    logger.error("KeyError: 'sentiment' not found in the response")
+                except Exception as e:
+                    review_detail['sentiment'] = 'unknown'
+                    logger.error(f"Error analyzing sentiment: {e}")
 
-    return JsonResponse({"status": 200, "reviews": reviews})
-
+            return JsonResponse({"status": 200, "reviews": reviews})
+        else:
+            logger.error(f"No reviews found for dealer_id: {dealer_id}")
+            return JsonResponse({"status": 404, "message": "No reviews found"})
+    else:
+        logger.error("Bad Request: dealer_id is missing")
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 # def get_dealer_details(request, dealer_id):
 # ...
 def get_dealer_details(request, dealer_id):
