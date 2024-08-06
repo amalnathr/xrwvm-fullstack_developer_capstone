@@ -1,50 +1,47 @@
-Copied!
-Resolution:
-Use except Exception: instead of except as a best practice for catching exceptions and handling them comprehensively.
-
-For instance, if the existing code is:
-
-1
-2
-except:
-    print("Error")
-Copied!
-You can change this to:
-
-1
-2
-except Exception as e:
-    print(f"Error: {e}")
-Copied!
-
-JS Hint (Javascript) Linting errors:
-1. If you receive one or more errors as listed below:
-1
-2
-3
-4
-5
-6
-7
-8
-9
-'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
-'arrow function syntax (=>)' is only available in ES6 (use 'esversion: 6').
-'async functions' is only available in ES8 (use 'esversion: 8').
-'let' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
-'template literal syntax' is only available in ES6 (use 'esversion: 6').
-Copied!
-Resolution:
-Add the line below at the start of the file(s) where this error is reported:
-
-1
-/*jshint esversion: 8 */
-Copied!
-
-2. Error:
-1
-['xxxxxx'] is better written in dot notation.
-Copied!
-Resolution:
-This issue arises when Dictionary/JSON key-value pairs are formatted as key[value]. To resolve it, switch the format to key.value.
-For example, if you have the existing code as: keyA['valA'], update it to keyA.valA.
+name: 'Lint Code'
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+jobs:
+  lint_python:
+    name: Lint Python Files
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+    - name: Print working directory
+      run: pwd
+    - name: Run Linter
+      run: |
+        pwd
+        # This command finds all Python files recursively and runs flake8 on them
+        find . -name "*.py" -exec flake8 {} +
+        echo "Linted all the python files successfully"
+  lint_js:
+      name: Lint JavaScript Files
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install JSHint
+        run: npm install jshint --global
+      - name: Run Linter
+        run: |
+          # This command finds all JavaScript files recursively and runs JSHint on them
+          find ./server/database -name "*.js" -exec jshint {} +
+          echo "Linted all the js files successfully"
