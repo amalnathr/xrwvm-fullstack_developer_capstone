@@ -1,8 +1,6 @@
-# Uncomment the imports below before you add the function code
 import requests
 import os
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
@@ -12,7 +10,6 @@ sentiment_analyzer_url = os.getenv(
     'sentiment_analyzer_url',
     default="https://sentianalyzer.1k8zyj7pmeng.us-south.codeengine.appdomain.cloud/")
 
-# def get_request(endpoint, **kwargs):
 # Add code for get requests to back end
 def get_request(endpoint, **kwargs):
     params = "&".join(f"{key}={value}" for key, value in kwargs.items())
@@ -34,9 +31,6 @@ def get_request(endpoint, **kwargs):
 
     return None
 
-
-# def analyze_review_sentiments(text):
-# request_url = sentiment_analyzer_url+"analyze/"+text
 # Add code for retrieving sentiments
 def analyze_review_sentiments(text):
     base_url = "https://sentianalyzer.1k8zyj7pmeng.us-south.codeengine.appdomain.cloud/analyze/"
@@ -56,7 +50,7 @@ def analyze_review_sentiments(text):
         print(f"Unexpected error: {err}")
 
     return None
-# def post_review(data_dict):
+    
 # Add code for posting review
 def post_review(data_dict):
     request_url = backend_url+"/insert_review"
