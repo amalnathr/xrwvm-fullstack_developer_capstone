@@ -1,39 +1,24 @@
-# Uncomment the following imports before adding the Model code
-
 from django.db import models
 from django.utils.timezone import now
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-
 # Create your models here.
 
-# <HINT> Create a Car Make model `class CarMake(models.Model)`:
-# - Name
-# - Description
-# - Any other fields you would like to include in car make model
-# - __str__ method to print a car make object
-
-
-# <HINT> Create a Car Model model `class CarModel(models.Model):`:
-# - Many-To-One relationship to Car Make model (One Car Make has many
-# Car Models, using ForeignKey field)
-# - Name
-# - Type (CharField with a choices argument to provide limited choices
-# such as Sedan, SUV, WAGON, etc.)
-# - Year (IntegerField) with min value 2015 and max value 2023
-# - Any other fields you would like to include in car model
-# - __str__ method to print a car make object
-
 class CarMake(models.Model):
+    """
+    Represents a car make.
+    """
     name = models.CharField(max_length=100)
     description = models.TextField()
-    # Other fields as needed
+    # Add any other fields as needed
 
     def __str__(self):
         return self.name  # Return the name as the string representation
-    
 
 class CarModel(models.Model):
+    """
+    Represents a car model, linked to a car make.
+    """
     car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)  # Many-to-One relationship
     name = models.CharField(max_length=100)
     CAR_TYPES = [
@@ -48,7 +33,11 @@ class CarModel(models.Model):
             MaxValueValidator(2023),
             MinValueValidator(2015)
         ])
-    # Other fields as needed
+    # Add any other fields as needed
 
     def __str__(self):
-        return self.name  # Return the name as the string representation
+        return f'{self.name} ({self.car_make.name})'  # Return the name and car make as the string representation
+
+    class Meta:
+        ordering = ['name']  # Example: order by name
+
