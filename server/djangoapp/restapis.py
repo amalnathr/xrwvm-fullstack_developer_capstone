@@ -39,6 +39,7 @@ def get_request(endpoint, **kwargs):
 
     return None
 
+
 # Add code for retrieving sentiments
 def analyze_review_sentiments(text):
     base_url = (
@@ -60,6 +61,7 @@ def analyze_review_sentiments(text):
         logger.error(f"Unexpected error: {err}")
 
     return None
+
 
 # Add code for posting review
 def post_review(data_dict):
