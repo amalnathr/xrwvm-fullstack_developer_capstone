@@ -11,6 +11,7 @@ import json
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 @csrf_exempt
 def login_user(request):
     """Handle user login."""
@@ -27,10 +28,12 @@ def login_user(request):
     
     return JsonResponse(response_data)
 
+
 def logout_user(request):
     """Handle user logout."""
     logout(request)
     return JsonResponse({"userName": ""})
+
 
 @csrf_exempt
 def registration(request):
@@ -56,11 +59,13 @@ def registration(request):
     
     return JsonResponse(response_data)
 
+
 def get_dealerships(request, state="All"):
     """Retrieve list of dealerships."""
     endpoint = "/fetchDealers" if state == "All" else f"/fetchDealers/{state}"
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
+
 
 def get_dealer_reviews(request, dealer_id):
     """Retrieve reviews for a specific dealer."""
@@ -88,6 +93,7 @@ def get_dealer_reviews(request, dealer_id):
         logger.error("Bad Request: dealer_id is missing")
         return JsonResponse({"status": 400, "message": "Bad Request"})
 
+
 def get_dealer_details(request, dealer_id):
     """Retrieve details for a specific dealer."""
     if dealer_id:
@@ -96,6 +102,7 @@ def get_dealer_details(request, dealer_id):
         return JsonResponse({"status": 200, "dealer": dealership})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
+
 
 def add_review(request):
     """Add a review if the user is authenticated."""
@@ -109,6 +116,7 @@ def add_review(request):
             return JsonResponse({"status": 401, "message": "Error in posting review"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
+
 
 def get_cars(request):
     """Retrieve a list of cars."""
