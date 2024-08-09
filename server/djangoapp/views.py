@@ -18,14 +18,15 @@ def login_user(request):
     data = json.loads(request.body)
     username = data.get('userName')
     password = data.get('password')
-    
+
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
         response_data = {"userName": username, "status": "Authenticated"}
     else:
-        response_data = {"userName": username, "status": "Authentication Failed"}
-    
+        response_data = {"userName": username,
+                          "status": "Authentication Failed"}
+
     return JsonResponse(response_data)
 
 
@@ -44,9 +45,9 @@ def registration(request):
     first_name = data.get('firstName')
     last_name = data.get('lastName')
     email = data.get('email')
-    
+
     username_exist = User.objects.filter(username=username).exists()
-    
+
     if not username_exist:
         user = User.objects.create_user(
             username=username, first_name=first_name, last_name=last_name,
@@ -56,7 +57,7 @@ def registration(request):
         response_data = {"userName": username, "status": "Authenticated"}
     else:
         response_data = {"userName": username, "error": "Already Registered"}
-    
+
     return JsonResponse(response_data)
 
 
@@ -113,7 +114,8 @@ def add_review(request):
             return JsonResponse({"status": 200})
         except Exception as e:
             logger.error(f"Error in posting review: {e}")
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
+            return JsonResponse({"status": 401, 
+                                 "message": "Error in posting review"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
 
@@ -123,11 +125,11 @@ def get_cars(request):
     count = CarMake.objects.count()
     if count == 0:
         initiate()
-    
+
     car_models = CarModel.objects.select_related('car_make')
     cars = [
         {"CarModel": car_model.name, "CarMake": car_model.car_make.name}
         for car_model in car_models
     ]
-    
+
     return JsonResponse({"CarModels": cars})
