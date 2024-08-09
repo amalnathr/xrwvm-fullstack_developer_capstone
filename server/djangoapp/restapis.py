@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 backend_url = os.getenv(
-    'backend_url', 
+    'backend_url',
     default="https://amalnathrmca-3030.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai"
 )
 sentiment_analyzer_url = os.getenv(
@@ -17,6 +17,7 @@ sentiment_analyzer_url = os.getenv(
 # Configure logger
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 # Add code for get requests to back end
 def get_request(endpoint, **kwargs):
@@ -45,7 +46,9 @@ def analyze_review_sentiments(text):
     base_url = (
         "https://sentianalyzer.1k8zyj7pmeng.us-south.codeengine.appdomain.cloud/analyze/"
     )
-    request_url = base_url + requests.utils.quote(text)  # Encode the text to handle spaces and special characters
+    request_url = base_url + requests.utils.quote(
+        text
+    )  # Encode the text to handle spaces and special characters
 
     try:
         response = requests.get(request_url)
@@ -61,6 +64,7 @@ def analyze_review_sentiments(text):
         logger.error(f"Unexpected error: {err}")
 
     return None
+
 
 # Add code for posting review
 def post_review(data_dict):
