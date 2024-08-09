@@ -88,7 +88,6 @@ def get_dealer_reviews(request, dealer_id):
                     review['sentiment'] = response.get('sentiment', 'unknown')
                 except KeyError:
                     review['sentiment'] = 'unknown'
-                    logger.error("KeyError: 'sentiment' not found in the response")
                 except Exception as e:
                     review['sentiment'] = 'unknown'
                     logger.error(f"Error analyzing sentiment: {e}")
