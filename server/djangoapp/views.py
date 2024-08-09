@@ -107,7 +107,8 @@ def get_dealer_details(request, dealer_id):
     if dealer_id:
         endpoint = f"/fetchDealer/{dealer_id}"
         dealership = get_request(endpoint)
-        return JsonResponse({"status": 200, "dealer": dealership})
+        response_data = {"status": 200, "dealer": dealership}
+        return JsonResponse(response_data)
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
 
@@ -137,7 +138,10 @@ def get_cars(request):
 
     car_models = CarModel.objects.select_related('car_make')
     cars = [
-        {"CarModel": car_model.name, "CarMake": car_model.car_make.name}
+        {
+            "CarModel": car_model.name,
+            "CarMake": car_model.car_make.name
+        }
         for car_model in car_models
     ]
 
