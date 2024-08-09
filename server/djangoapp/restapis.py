@@ -12,7 +12,8 @@ backend_url = os.getenv(
 )
 sentiment_analyzer_url = os.getenv(
     'sentiment_analyzer_url',
-    default="https://sentianalyzer.1k8zyj7pmen'g.us-south.codeengine.appdomain.cloud/"
+    default=("https://sentianalyzer.1k8zyj7pme"
+             "n'g.us-south.codeengine.appdomain.cloud/")
 )
 
 # Configure logger
@@ -45,7 +46,8 @@ def get_request(endpoint, **kwargs):
 # Add code for retrieving sentiments
 def analyze_review_sentiments(text):
     base_url = (
-       "https://sentianalyzer.1k8zyj7pmeng.us-south.codeengine.appdomain.cloud/analyze/"
+       "https://sentianalyzer.1k8zyj7pmeng."
+       "us-south.codeengine.appdomain.cloud/analyze/"
     )
     request_url = base_url + requests.utils.quote(
         text
