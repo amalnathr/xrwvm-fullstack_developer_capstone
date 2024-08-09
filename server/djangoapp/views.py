@@ -24,8 +24,10 @@ def login_user(request):
         login(request, user)
         response_data = {"userName": username, "status": "Authenticated"}
     else:
-        response_data = {"userName": username,
-                          "status": "Authentication Failed"}
+        response_data = {
+            "userName": username,
+            "status": "Authentication Failed"
+        }
 
     return JsonResponse(response_data)
 
@@ -56,14 +58,19 @@ def registration(request):
         login(request, user)
         response_data = {"userName": username, "status": "Authenticated"}
     else:
-        response_data = {"userName": username, "error": "Already Registered"}
+        response_data = {
+            "userName": username,
+            "error": "Already Registered"
+        }
 
     return JsonResponse(response_data)
 
 
 def get_dealerships(request, state="All"):
     """Retrieve list of dealerships."""
-    endpoint = "/fetchDealers" if state == "All" else f"/fetchDealers/{state}"
+    endpoint = (
+        "/fetchDealers" if state == "All" else f"/fetchDealers/{state}"
+    )
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
 
@@ -114,8 +121,10 @@ def add_review(request):
             return JsonResponse({"status": 200})
         except Exception as e:
             logger.error(f"Error in posting review: {e}")
-            return JsonResponse({"status": 401, 
-                                 "message": "Error in posting review"})
+            return JsonResponse({
+                "status": 401,
+                "message": "Error in posting review"
+            })
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
 
